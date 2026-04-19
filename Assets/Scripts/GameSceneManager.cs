@@ -25,6 +25,8 @@ public class GameSceneManager : MonoBehaviour
     public AudioClip scoreSound;
     public AudioClip gameOverSound;
     public AudioClip gameWinSound;
+
+    public AudioClip playerCelebration;
     //public AudioClip explosionSound;
     public AudioClip collisionSound;
 
@@ -37,34 +39,32 @@ public class GameSceneManager : MonoBehaviour
     public GameObject completeLevelUI;
 
 
+    //AUDIO SOURCE BG
+    private AudioSource bgAudioSource;
 
-    public void GoHome()
-    {
-        //added for AUDIO
-        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>().PlayOneShot(clickSound);
-       
-        SceneManager.LoadScene("HomeScene");
-        //game over
-        GameOver();  //YC: store currentScore if currentScore>highScore
-    }
-
-    //ASSIGNMENT 2
-    public void RestartGame()
-    {
-        //added for AUDIO
-        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>().PlayOneShot(clickSound);
+    //SCORE REWARD FOR OBSTACLE
+    private int OBSTACLE_SCORE_REWARD = 15;
+    private int OBSTACLE_TIME_REWARD = 15;
 
 
-        SceneManager.LoadScene("GameScene");
-        //game over
-        GameOver();  //YC: store currentScore if currentScore>highScore
-    }
+
+
+
+    [Header("KEY SYSTEM")]
+    public TMP_Text tmKeyMessage;      // "You need the key" message s
+    public float keyMessageDuration = 2.5f;
+    private bool keyMessageShowing = false;
+
+    [Header("NEXT LEVEL")]
+    public string levelTwoSceneName = "GameSceneTwo";
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Debug.Log("Game Begins");
 
+       
         currentTime = MAX_TIME;
 
         if (PlayerPrefs.HasKey("HighScore"))
@@ -75,7 +75,14 @@ public class GameSceneManager : MonoBehaviour
         if (PlayerPrefs.HasKey("UserName"))
             tmName.text = PlayerPrefs.GetString("UserName");
 
+        //DISPLAY HIGH SCORE
         tmHighScore.text = "High Score: " + highScore;
+
+
+        //TEST
+        //string highScoreOwner = PlayerPrefs.GetString("HighScoreName", "empty");
+
+        //tmHighScore.text = "High Score: " + highScore + "-" + highScoreOwner;
 
         StartCoroutine("LoseTime");
 
@@ -83,7 +90,80 @@ public class GameSceneManager : MonoBehaviour
         //GAME COMPLETED
         completeLevelUI.SetActive(false); //makes it inactive from start
 
+
+        //AUDIO DOESNT OVERLAP
+        bgAudioSource = GameObject
+            .FindGameObjectWithTag("MainCamera")
+            .GetComponent<AudioSource>();
+
+
+        if (!bgAudioSource.isPlaying) //make sure music is playing when level starts
+        {
+            bgAudioSource.Play();
+        }
+
+
+
+        // RESET KEY FOR NEW LEVEL
+        PlayerPrefs.SetInt("KeyCollected", 0);
+
+
     }
+
+
+    public void GoHome()
+    {
+        //added for AUDIO
+        GameObject.FindGameObjectWithTag("MainCamera")
+            .GetComponent<AudioSource>()
+            .PlayOneShot(clickSound);
+       
+        SceneManager.LoadScene("HomeScene");
+        //game over
+        GameOver();  //YC: store currentScore if currentScore>highScore
+    }
+
+    //ASSIGNMENT 2
+    public void RestartGame()
+    {
+
+        // STOP BACKGROUND MUSIC
+        bgAudioSource.Stop();
+
+        //added for AUDIO
+        bgAudioSource.PlayOneShot(clickSound);
+
+
+        SceneManager.LoadScene("GameScene");
+        //game over
+        GameOver();  //YC: store currentScore if currentScore>highScore
+    }
+
+
+    //LOADS NEXT LEVEL.
+    //in order to make it work it takes the index number and adds 1. In order to do this the profile builds for scenes need to be in order
+    //or else it will take the user to a wrong scene
+    public void NextLevel()
+    {
+        bgAudioSource.Stop();
+
+        bgAudioSource.PlayOneShot(clickSound);
+
+
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+
+        //check if the next scene index exists in the build settings
+        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(nextSceneIndex);
+        }
+        else
+        {
+            UnityEngine.Debug.Log("No more scene in build settings!");
+        }
+    }
+
+   
 
     private void UpdateLabels()
     {
@@ -91,6 +171,8 @@ public class GameSceneManager : MonoBehaviour
         tmTimeLeft.text = "Time Left: " + currentTime;
     }
 
+
+    //LOSE TIME 
     IEnumerator LoseTime()
     {
         while (true)
@@ -100,32 +182,29 @@ public class GameSceneManager : MonoBehaviour
 
             if (currentTime % 5 == 0)
             {
-                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>().PlayOneShot(scoreSound);
+                GameObject.FindGameObjectWithTag("MainCamera")
+                    .GetComponent<AudioSource>()
+                    .PlayOneShot(scoreSound);
 
                 currentScore += SCORE_INCREMENT;
+
             }
 
 
-            //added for AUDIO
 
-            //explision sound every 3 seconds
-            //if (currentTime % 3 == 0)
-            //{
-            //    //added for AUDIO
-            //    GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>().PlayOneShot(explosionSound);
-
-            //}
 
             //ASSIGNMENT 2
             if (PlayerPrefs.HasKey("CheckPointHit"))
             {
                 if (PlayerPrefs.GetInt("CheckPointHit") == 1)
                 {
-                    GameObject.Find("CheckPointObject").GetComponent<PanelFader>().FadeOut();
+                    GameObject.Find("CheckpointObject").GetComponent<PanelFader>().FadeOut();
 
                     currentTime += TIME_INCREMENT;
 
-                    GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>().PlayOneShot(checkpointSound);
+                    GameObject.FindGameObjectWithTag("MainCamera")
+                        .GetComponent<AudioSource>()
+                        .PlayOneShot(checkpointSound);
 
                     PlayerPrefs.SetInt("CheckPointHit", 0);
                 }
@@ -145,6 +224,23 @@ public class GameSceneManager : MonoBehaviour
                 }
             }
 
+            // OBSTACLE HIT TIME REWARD
+            if (PlayerPrefs.HasKey("TimeBonus"))
+            {
+                currentTime += PlayerPrefs.GetInt("TimeBonus");
+                PlayerPrefs.DeleteKey("TimeBonus");
+            }
+
+
+
+            // OBSTACLE DESTROY SCORE REWARD
+            if (PlayerPrefs.HasKey("ObstacleDestroyed"))
+            {
+                currentScore += OBSTACLE_SCORE_REWARD;
+                PlayerPrefs.DeleteKey("ObstacleDestroyed");
+            }
+
+
             if (currentTime <= 0)
                 break;
         }
@@ -156,12 +252,26 @@ public class GameSceneManager : MonoBehaviour
     //UPDATED FOR ASSIGNMENT 2
     private void GameOver()
     {
-        GameObject.Find("GameOverObject").GetComponent<PanelFader>().FadeIn(); 
+        GameObject.Find("GameOverObject").GetComponent<PanelFader>().FadeIn();
 
+
+        //UNCOMMENT IF ONLY WANNA SHOW SCORE AND NO NAME
         if (highScore < currentScore)
             PlayerPrefs.SetInt("HighScore", currentScore);
 
-        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>().PlayOneShot(gameOverSound);
+
+        // Save the player name that achieved it
+        //string playerName = PlayerPrefs.GetString("UserName");
+        //PlayerPrefs.SetString("HighScoreName", playerName);
+
+        //PlayerPrefs.Save();
+
+
+
+        // STOP BACKGROUND MUSIC
+        bgAudioSource.Stop();
+
+        bgAudioSource.PlayOneShot(gameOverSound);
 
         Debug.Log("Game Over");
     }
@@ -175,14 +285,52 @@ public class GameSceneManager : MonoBehaviour
 
     //ASSIGNMENT 2 LEVEL FUNCTIONS
 
-
-    //shows canvas with game won
+    //UPDATED: uses key for next level
     public void CompleteLevel()
     {
-        completeLevelUI.SetActive(true); //enable true, disable false
-        UnityEngine.Debug.Log("LEVEL WON!");
+        bool hasKey = PlayerPrefs.GetInt("KeyCollected", 0) == 1;
 
-        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>().PlayOneShot(gameWinSound);
+        if (hasKey)
+        {
+            completeLevelUI.SetActive(true);
+            Debug.Log("LEVEL WON!");
+
+
+            // STOP BACKGROUND MUSIC
+            bgAudioSource.Stop();
+
+            //PLAY WIN SOUND
+            bgAudioSource.PlayOneShot(gameWinSound);
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>().PlayOneShot(playerCelebration);
+
+        }
+
+        else
+        {
+            ShowKeyMessage("You need the key!");
+        }
+    }
+
+
+    //KEY MESSAGE COROUTINE
+    private void ShowKeyMessage(string message)
+    {
+        if (keyMessageShowing)
+            return;
+
+        StartCoroutine(KeyMessageRoutine(message));
+    }
+
+    private IEnumerator KeyMessageRoutine(string message)
+    {
+        keyMessageShowing = true;
+        tmKeyMessage.text = message;
+        tmKeyMessage.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(keyMessageDuration);
+
+        tmKeyMessage.gameObject.SetActive(false);
+        keyMessageShowing = false;
     }
 
 }

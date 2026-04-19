@@ -1,20 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 public class DamageControl : MonoBehaviour
 {
-    //The box's current health point total
     public int currentHealth = 3;
+
+    private bool destroyed = false;
+
     public void Damage(int damageAmount)
     {
-        //subtract damage amount when Damage function is called
+        if (destroyed) return;
+
         currentHealth -= damageAmount;
-        //Check if health has fallen below zero
+
+        // +15 seconds PER HIT
+        PlayerPrefs.SetInt("TimeBonus", 15);
+
         if (currentHealth <= 0)
         {
-            //if health has fallen below zero, deactivate it
+            destroyed = true;
+
+            // +15 score ON DESTROY
+            PlayerPrefs.SetInt("ObstacleDestroyed", 1);
+
             gameObject.SetActive(false);
         }
     }
 }
-

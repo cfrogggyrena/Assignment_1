@@ -5,6 +5,7 @@
 //
 using UnityEngine;
 using System.Collections;
+using System.Diagnostics;
 
 namespace UnityChan
 {
@@ -122,7 +123,7 @@ namespace UnityChan
 		// JUMP中の処理
 		// 現在のベースレイヤーがjumpStateの時
 		else if (currentBaseState.nameHash == jumpState) {
-				cameraObject.SendMessage ("setCameraPositionJumpView");	// ジャンプ中のカメラに変更
+				cameraObject.SendMessage ("MainCamera");	// ジャンプ中のカメラに変更
 				// ステートがトランジション中でない場合
 				if (!anim.IsInTransition (0)) {
 				
@@ -198,5 +199,30 @@ namespace UnityChan
 			col.height = orgColHight;
 			col.center = orgVectColCenter;
 		}
-	}
+
+
+
+
+
+        //ADD ON PHYISICS FOR COLLISION SOUND (and fix collision for only obstacles lol)
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.collider.GetComponentInParent<DamageControl>() != null)
+            {
+                PlayerPrefs.SetInt("Collided", 1);
+            }
+
+
+            UnityEngine.Debug.Log(
+                "Hit: " + collision.collider.name +
+                " | Parent: " + collision.collider.transform.root.name +
+                " | Has DamageControl: " +
+                (collision.collider.GetComponentInParent<DamageControl>() != null)
+            );
+
+        }
+
+
+    }
 }

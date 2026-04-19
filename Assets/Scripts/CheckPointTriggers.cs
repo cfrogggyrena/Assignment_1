@@ -16,5 +16,6 @@ public class CheckPointTriggers : MonoBehaviour
         print("Hit checkpoint");
         PlayerPrefs.SetInt("CheckPointHit", 1);
         gameObject.SetActive(false);
+
     }
 }
