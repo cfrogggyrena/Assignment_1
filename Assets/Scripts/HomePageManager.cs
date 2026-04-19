@@ -7,7 +7,7 @@ using TMPro;
 public class HomePageManager : MonoBehaviour
 {
 
-    public TMP_Text tmName;
+    public TMP_InputField inputName;
     public GameObject AboutPanel;
 
     //for audio
@@ -17,7 +17,7 @@ public class HomePageManager : MonoBehaviour
     {
         //for audio
         GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>().PlayOneShot(clickSound);
-
+        PlayerPrefs.SetString("UserName", inputName.text); //Bring username from homescene to game start (without going into settings)
         SceneManager.LoadScene("GameScene");
     }
 
@@ -25,7 +25,7 @@ public class HomePageManager : MonoBehaviour
     {
         //for audio
         GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>().PlayOneShot(clickSound);
-
+        PlayerPrefs.SetString("UserName", inputName.text);
         SceneManager.LoadScene("IntroScene");
     }
 
@@ -50,9 +50,7 @@ public class HomePageManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (PlayerPrefs.HasKey("UserName"))
-            tmName.text = "Welcome " +
-                PlayerPrefs.GetString("UserName");
+       
     }
 
     // Update is called once per frame

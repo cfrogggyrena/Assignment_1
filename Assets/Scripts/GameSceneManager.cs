@@ -14,7 +14,7 @@ public class GameSceneManager : MonoBehaviour
     public TMP_Text tmTimeLeft;
     public TMP_Text tmName;
 
-    private int MAX_TIME = 45;
+    private int MAX_TIME = 50;
     private int SCORE_INCREMENT = 10;
     private int currentTime;
     private int currentScore;
@@ -42,7 +42,6 @@ public class GameSceneManager : MonoBehaviour
     {
         //added for AUDIO
         GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>().PlayOneShot(clickSound);
-
        
         SceneManager.LoadScene("HomeScene");
         //game over
@@ -122,7 +121,7 @@ public class GameSceneManager : MonoBehaviour
             {
                 if (PlayerPrefs.GetInt("CheckPointHit") == 1)
                 {
-                    GameObject.Find("CheckPointCanvas").GetComponent<PanelFader>().FadeOut();
+                    GameObject.Find("CheckPointObject").GetComponent<PanelFader>().FadeOut();
 
                     currentTime += TIME_INCREMENT;
 
@@ -157,7 +156,7 @@ public class GameSceneManager : MonoBehaviour
     //UPDATED FOR ASSIGNMENT 2
     private void GameOver()
     {
-        GameObject.Find("GameOverCanvas").GetComponent<PanelFader>().FadeIn();
+        GameObject.Find("GameOverObject").GetComponent<PanelFader>().FadeIn(); 
 
         if (highScore < currentScore)
             PlayerPrefs.SetInt("HighScore", currentScore);
