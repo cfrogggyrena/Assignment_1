@@ -206,21 +206,30 @@ namespace UnityChan
 
         //ADD ON PHYISICS FOR COLLISION SOUND (and fix collision for only obstacles lol)
 
+        private bool hitCooldown = false;
+
         private void OnCollisionEnter(Collision collision)
         {
+            if (hitCooldown)
+                return;
+
             if (collision.collider.GetComponentInParent<DamageControl>() != null)
             {
+                hitCooldown = true;
+
                 PlayerPrefs.SetInt("Collided", 1);
+
+                FindObjectOfType<GameSceneManager>()
+                    .PlayerHitObstacle(gameObject);
+
+                StartCoroutine(ResetHitCooldown());
             }
+        }
 
-
-            UnityEngine.Debug.Log(
-                "Hit: " + collision.collider.name +
-                " | Parent: " + collision.collider.transform.root.name +
-                " | Has DamageControl: " +
-                (collision.collider.GetComponentInParent<DamageControl>() != null)
-            );
-
+        private IEnumerator ResetHitCooldown()
+        {
+            yield return new WaitForSeconds(1.0f);
+            hitCooldown = false;
         }
 
 

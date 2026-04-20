@@ -28,7 +28,7 @@ public class GameSceneManager : MonoBehaviour
 
     public AudioClip playerCelebration;
     //public AudioClip explosionSound;
-    public AudioClip collisionSound;
+    //public AudioClip collisionSound;
 
 
     //ASSIGNMENT 2
@@ -46,17 +46,40 @@ public class GameSceneManager : MonoBehaviour
     private int OBSTACLE_SCORE_REWARD = 15;
     private int OBSTACLE_TIME_REWARD = 15;
 
+    //GAME STATE FLAG
+    private bool gameEnded = false;
+
+
+    [Header("LIFE UI")]
+    public GameObject[] heartIcons;  // size = 3
+    public AudioClip heartLostSound;
 
 
 
 
     [Header("KEY SYSTEM")]
-    public TMP_Text tmKeyMessage;      // "You need the key" message s
+    public TMP_Text tmKeyMessage;      // "You need the key" message 
     public float keyMessageDuration = 2.5f;
     private bool keyMessageShowing = false;
 
     [Header("NEXT LEVEL")]
     public string levelTwoSceneName = "GameSceneTwo";
+
+    [Header("LIFE SYSTEM")]
+    public int maxLives = 3;
+    private int currentLives;
+
+    
+
+
+    [Header("LIFE FEEDBACK")]
+    public TMP_Text tmLifeMessage;
+    public float lifeMessageDuration = 2.0f;
+    public AudioClip lifeLostSound;
+
+    private bool isRespawning = false;
+    public Transform respawnPoint; // assign in Inspector
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -64,7 +87,12 @@ public class GameSceneManager : MonoBehaviour
     {
         Debug.Log("Game Begins");
 
-       
+        //INITIALIZE LIVES
+        currentLives = maxLives;
+        PlayerPrefs.SetInt("PlayerLives", currentLives);
+
+
+
         currentTime = MAX_TIME;
 
         if (PlayerPrefs.HasKey("HighScore"))
@@ -108,6 +136,25 @@ public class GameSceneManager : MonoBehaviour
         PlayerPrefs.SetInt("KeyCollected", 0);
 
 
+
+        //INITIALIZE HEARTS
+        currentLives = maxLives;
+
+        for (int i = 0; i < heartIcons.Length; i++)
+        {
+            heartIcons[i].SetActive(true);
+        }
+
+
+    }
+
+    //update hearts method (heart disappears)
+    private void UpdateHearts()
+    {
+        for (int i = 0; i < heartIcons.Length; i++)
+        {
+            heartIcons[i].SetActive(i < currentLives);
+        }
     }
 
 
@@ -175,7 +222,7 @@ public class GameSceneManager : MonoBehaviour
     //LOSE TIME 
     IEnumerator LoseTime()
     {
-        while (true)
+        while (!gameEnded)
         {
             yield return new WaitForSeconds(1);
             currentTime--;
@@ -216,7 +263,6 @@ public class GameSceneManager : MonoBehaviour
             {
                 if (PlayerPrefs.GetInt("Collided") == 1)
                 {
-                    GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>().PlayOneShot(collisionSound);
 
                     currentScore -= SCORE_INCREMENT;
 
@@ -252,26 +298,32 @@ public class GameSceneManager : MonoBehaviour
     //UPDATED FOR ASSIGNMENT 2
     private void GameOver()
     {
-        GameObject.Find("GameOverObject").GetComponent<PanelFader>().FadeIn();
+
+        if (gameEnded)
+            return;
+
+        gameEnded = true;
+
+        StopAllCoroutines(); //stops time, score and checkpoint after losing.
+
+        currentTime = 0; //force display to 0
 
 
-        //UNCOMMENT IF ONLY WANNA SHOW SCORE AND NO NAME
-        if (highScore < currentScore)
-            PlayerPrefs.SetInt("HighScore", currentScore);
+        GameObject.Find("GameOverObject")
+            .GetComponent<PanelFader>()
+            .FadeIn();
 
-
-        // Save the player name that achieved it
-        //string playerName = PlayerPrefs.GetString("UserName");
-        //PlayerPrefs.SetString("HighScoreName", playerName);
-
-        //PlayerPrefs.Save();
-
-
+       
 
         // STOP BACKGROUND MUSIC
         bgAudioSource.Stop();
-
         bgAudioSource.PlayOneShot(gameOverSound);
+
+
+
+        //SHOW SCORE AND NO NAME
+        if (highScore < currentScore)
+            PlayerPrefs.SetInt("HighScore", currentScore);
 
         Debug.Log("Game Over");
     }
@@ -333,4 +385,82 @@ public class GameSceneManager : MonoBehaviour
         keyMessageShowing = false;
     }
 
+
+
+    //CENTRAL LIFE LOSS METHOD
+    public void PlayerHitObstacle(GameObject player)
+    {
+        if (isRespawning)
+            return;
+
+        currentLives--;
+
+
+        // Play heart sound
+        bgAudioSource.PlayOneShot(heartLostSound);
+
+        // Update hearts UI
+        UpdateHearts();
+
+
+        PlayerPrefs.SetInt("PlayerLives", currentLives);
+
+        Debug.Log("Lives left: " + currentLives);
+
+        if (currentLives > 0)
+        {
+            StartCoroutine(LifeLostRoutine(player));
+        }
+        else
+        {
+            GameOver();
+        }
+    }
+
+
+
+    //RESPAWN LOGIC
+    private void RespawnPlayer(GameObject player)
+    {
+        Rigidbody rb = player.GetComponent<Rigidbody>();
+
+        // Disable physics briefly
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true;
+
+        player.transform.position = respawnPoint.position;
+        player.transform.rotation = respawnPoint.rotation;
+
+        // Re-enable physics
+        rb.isKinematic = false;
+    }
+
+
+    private IEnumerator LifeLostRoutine(GameObject player)
+    {
+        isRespawning = true;
+
+        // Stop player movement
+        Rigidbody rb = player.GetComponent<Rigidbody>();
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true;
+
+        // Play sound
+        bgAudioSource.PlayOneShot(lifeLostSound);
+
+        // Show message
+        tmLifeMessage.text = "You lost a life!";
+        tmLifeMessage.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(lifeMessageDuration);
+
+        tmLifeMessage.gameObject.SetActive(false);
+
+        RespawnPlayer(player);
+
+        rb.isKinematic = false;
+        isRespawning = false;
+    }
 }
