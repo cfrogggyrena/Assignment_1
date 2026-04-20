@@ -1338,11 +1338,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   textComponent: {fileID: 622520938}
   lines:
-  - Unity-chan was taking a taxi cab, when suddenly...
-  - the ride ended and she realize she didn't have any money
-  - she's broke...
-  - There's no other choice, you have to make the run for it
-  - I'm not paying for this ride. Not on this economy!!
+  - unity chan needs to go to the washroom
+  - go around the city for the key to her house
+  - hurry up...she cant hold it anymore
+  - there is obstacles around the world
+  - destroy them or die if you touch them
+  - after finding the key, go to unity chans house
+  - 'its the only way to win '
+  - good luck!
   textSpeed: 0.05
   isOutro: 0
   dialogueSound: {fileID: 8300000, guid: 5a2a548b0f05742419c5842ec3b8b99d, type: 3}
