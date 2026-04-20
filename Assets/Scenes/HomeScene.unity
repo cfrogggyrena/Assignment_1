@@ -742,6 +742,10 @@ PrefabInstance:
       value: 58.734985
       objectReference: {fileID: 0}
     - target: {fileID: 5348144775410427985, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1226032131, guid: b59b99b9633d14b56b096dad16f1981e, type: 3}
+    - target: {fileID: 5348144775410427985, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
       propertyPath: m_Color.b
       value: 0.7989498
       objectReference: {fileID: 0}
@@ -823,7 +827,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5884712021281864212, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
       propertyPath: m_text
-      value: Welcome to Unity-chan's escape!
+      value: Welcome to Unity-chan's escape TWO!
       objectReference: {fileID: 0}
     - target: {fileID: 5884712021281864212, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
       propertyPath: m_margin.y
@@ -838,9 +842,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 7353241b6a66f4589bcf53ff345b14fe, type: 2}
     - target: {fileID: 5884712021281864212, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.015686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 5884712021281864212, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.92156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 5884712021281864212, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5884712021281864212, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -6802855379069607823, guid: 7353241b6a66f4589bcf53ff345b14fe, type: 2}
+    - target: {fileID: 5884712021281864212, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278512639
+      objectReference: {fileID: 0}
     - target: {fileID: 5884712021281864212, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
@@ -888,6 +908,18 @@ PrefabInstance:
     - target: {fileID: 6227213894170626359, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
       propertyPath: m_SizeDelta.y
       value: 39.053
+      objectReference: {fileID: 0}
+    - target: {fileID: 6227213894170626359, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.7867
+      objectReference: {fileID: 0}
+    - target: {fileID: 6227213894170626359, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.7867
+      objectReference: {fileID: 0}
+    - target: {fileID: 6227213894170626359, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.7867
       objectReference: {fileID: 0}
     - target: {fileID: 6227213894170626359, guid: 59052513d8b5349f89b65ed91c3a55c0, type: 3}
       propertyPath: m_AnchoredPosition.x
