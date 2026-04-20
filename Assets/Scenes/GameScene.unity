@@ -662,14 +662,14 @@ RectTransform:
   m_GameObject: {fileID: 118708923}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.6364, y: 1.6364, z: 1.6364}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2046358010}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 52.3741, y: 139.7231}
+  m_AnchoredPosition: {x: 52.3741, y: 207}
   m_SizeDelta: {x: 886.3348, y: 70.605}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &118708925
@@ -692,7 +692,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Congrats, you escaped without paying succesfully!
+  m_text: Congrats. Unity-chan was able to reach the washroom on time!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7353241b6a66f4589bcf53ff345b14fe, type: 2}
   m_sharedMaterial: {fileID: -6802855379069607823, guid: 7353241b6a66f4589bcf53ff345b14fe, type: 2}
@@ -701,8 +701,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279111182
-  m_fontColor: {r: 0.05660379, g: 0.05660379, b: 0.05660379, a: 1}
+    rgba: 4278512639
+  m_fontColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3879,7 +3879,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -1226032131, guid: b59b99b9633d14b56b096dad16f1981e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4527,7 +4527,7 @@ RectTransform:
   m_GameObject: {fileID: 859309490}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5039, y: 1.5039, z: 1.5039}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2046358010}
@@ -4557,8 +4557,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hopefully that taxi driver doesn't recognize you next time...it's a small
-    town after all.
+  m_text: make surenot to drop your keys next time...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7353241b6a66f4589bcf53ff345b14fe, type: 2}
   m_sharedMaterial: {fileID: -6802855379069607823, guid: 7353241b6a66f4589bcf53ff345b14fe, type: 2}
@@ -4567,8 +4566,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4278512639
+  m_fontColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -15278,7 +15277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1520474754491142497, guid: 0457017d0b4b72244858674fee7d3b08, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -21.9
+      value: -27.76
       objectReference: {fileID: 0}
     - target: {fileID: 1520474754491142497, guid: 0457017d0b4b72244858674fee7d3b08, type: 3}
       propertyPath: m_LocalRotation.w
