@@ -2,10 +2,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Unity.Cinemachine;
 
 public class CameraController : MonoBehaviour
 {
-    public List<GameObject> cameras;
+    public List<CinemachineVirtualCameraBase> cameras;
 
     public int currentCameraIndex = 0;
 
