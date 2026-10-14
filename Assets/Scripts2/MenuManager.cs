@@ -8,28 +8,23 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
 
-    //for audio
-    public AudioClip clickSound;
-    public AudioSource audioSource;
-
-
-
-    public void onClick()
+    public void goToGame()
     {
-        //for audio
-        audioSource.PlayOneShot(clickSound);
-        
-
-        //uses scene manager to go to game with 0.5s delay to allow audio to play. It wasnt working before :(
-        StartCoroutine(LoadSceneDelay());
-        
-    }
-
-    private IEnumerator LoadSceneDelay()
-    {
-        yield return new WaitForSeconds(0.5f);
+    
         SceneManager.LoadScene("GameScene");
+
     }
+
+    public void goToSettings()
+    {
+
+        SceneManager.LoadScene("SettingScene");
+
+    }
+
+
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
