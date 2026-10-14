@@ -8,7 +8,7 @@ public class LoadingManager : MonoBehaviour
 
     //assign var for timer and total time
     private float timer = 0f;
-    private float totalTime = 40f;
+    private float totalTime = 10f;
 
     void Update()
     {
