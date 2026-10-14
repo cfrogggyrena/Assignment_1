@@ -5,7 +5,6 @@
 //
 using UnityEngine;
 using System.Collections;
-using System.Diagnostics;
 
 namespace UnityChan
 {
@@ -123,7 +122,7 @@ namespace UnityChan
 		// JUMP中の処理
 		// 現在のベースレイヤーがjumpStateの時
 		else if (currentBaseState.nameHash == jumpState) {
-				cameraObject.SendMessage ("MainCamera");	// ジャンプ中のカメラに変更
+				cameraObject.SendMessage ("setCameraPositionJumpView");	// ジャンプ中のカメラに変更
 				// ステートがトランジション中でない場合
 				if (!anim.IsInTransition (0)) {
 				
@@ -179,17 +178,16 @@ namespace UnityChan
 			}
 		}
 
-		//COMMENTING SO IT DOESN'T SHOW UP ON GAME SCENE
-		//void OnGUI ()
-		//{
-		//	GUI.Box (new Rect (Screen.width - 260, 10, 250, 150), "Interaction");
-		//	GUI.Label (new Rect (Screen.width - 245, 30, 250, 30), "Up/Down Arrow : Go Forwald/Go Back");
-		//	GUI.Label (new Rect (Screen.width - 245, 50, 250, 30), "Left/Right Arrow : Turn Left/Turn Right");
-		//	GUI.Label (new Rect (Screen.width - 245, 70, 250, 30), "Hit Space key while Running : Jump");
-		//	GUI.Label (new Rect (Screen.width - 245, 90, 250, 30), "Hit Spase key while Stopping : Rest");
-		//	GUI.Label (new Rect (Screen.width - 245, 110, 250, 30), "Left Control : Front Camera");
-		//	GUI.Label (new Rect (Screen.width - 245, 130, 250, 30), "Alt : LookAt Camera");
-		//}
+		void OnGUI ()
+		{
+			GUI.Box (new Rect (Screen.width - 260, 10, 250, 150), "Interaction");
+			GUI.Label (new Rect (Screen.width - 245, 30, 250, 30), "Up/Down Arrow : Go Forwald/Go Back");
+			GUI.Label (new Rect (Screen.width - 245, 50, 250, 30), "Left/Right Arrow : Turn Left/Turn Right");
+			GUI.Label (new Rect (Screen.width - 245, 70, 250, 30), "Hit Space key while Running : Jump");
+			GUI.Label (new Rect (Screen.width - 245, 90, 250, 30), "Hit Spase key while Stopping : Rest");
+			GUI.Label (new Rect (Screen.width - 245, 110, 250, 30), "Left Control : Front Camera");
+			GUI.Label (new Rect (Screen.width - 245, 130, 250, 30), "Alt : LookAt Camera");
+		}
 
 
 		// キャラクターのコライダーサイズのリセット関数
@@ -199,39 +197,5 @@ namespace UnityChan
 			col.height = orgColHight;
 			col.center = orgVectColCenter;
 		}
-
-
-
-
-
-        //ADD ON PHYISICS FOR COLLISION SOUND (and fix collision for only obstacles lol)
-
-        private bool hitCooldown = false;
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (hitCooldown)
-                return;
-
-            if (collision.collider.GetComponentInParent<DamageControl>() != null)
-            {
-                hitCooldown = true;
-
-                PlayerPrefs.SetInt("Collided", 1);
-
-                FindObjectOfType<GameSceneManager>()
-                    .PlayerHitObstacle(gameObject);
-
-                StartCoroutine(ResetHitCooldown());
-            }
-        }
-
-        private IEnumerator ResetHitCooldown()
-        {
-            yield return new WaitForSeconds(1.0f);
-            hitCooldown = false;
-        }
-
-
-    }
+	}
 }

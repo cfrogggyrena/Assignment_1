@@ -2,16 +2,11 @@ using UnityEngine;
 
 public class EndTrigger : MonoBehaviour
 {
-    public GameSceneManager gameManager;
+    public GameManager gameManager;
 
-
-    
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter()
     {
-        if (!other.CompareTag("Player")) //only player triggers ending scene or messages
-            return;
-
         gameManager.CompleteLevel();
+       
     }
-
 }
