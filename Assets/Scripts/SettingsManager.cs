@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SettingsManager : MonoBehaviour
 {
@@ -11,8 +12,8 @@ public class SettingsManager : MonoBehaviour
     void Start()
     {
         //sets both values at start from playerprefs
-        soundFX.value = PlayerPrefs.GetFloat("SFX", 1); 
-        bgMusic.value = PlayerPrefs.GetFloat("BGM", 1);
+        soundFX.value = PlayerPrefs.GetFloat("SFX", 1f); 
+        bgMusic.value = PlayerPrefs.GetFloat("BGM", 1f);
     }
 
     //method to save sfx in player prefs
@@ -27,6 +28,19 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.SetFloat("BGM", value);
     }
 
+    //reset stats of scrollbar (reset prefabs)
+    public void ResetStats()
+    {
+        PlayerPrefs.DeleteKey("TotalScore");
+        PlayerPrefs.DeleteKey("BestRun");
+        PlayerPrefs.DeleteKey("GamesPlayed");
+    }
+
+    // go back to home scene
+    public void Back()
+    {
+        SceneManager.LoadScene("HomeScene");
+    }
 
     // Update is called once per frame
     void Update()
