@@ -53,7 +53,7 @@ public class SettingsManager : MonoBehaviour
     // go back to home scene
     public void Back()
     {
-        SceneManager.LoadScene("HomeScene");
+        FindAnyObjectByType<LoadingManager>().LoadScene("HomeScene"); //use loading manager
     }
 
     // Update is called once per frame

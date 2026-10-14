@@ -77,6 +77,6 @@ public class GameManager : MonoBehaviour
     IEnumerator ReturnHome()
     {
         yield return new WaitForSeconds(5); //wait for 5s (duh)
-        SceneManager.LoadScene("HomeScene"); //loads homescene
+        FindAnyObjectByType<LoadingManager>().LoadScene("HomeScene"); //loads homescene
     }
 }

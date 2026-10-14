@@ -42,6 +42,11 @@ public class MainPlayerController : MonoBehaviour
     {
         UnityEngine.Vector3 moveDirection = transform.forward * move.y + transform.right * move.x; //change to vector 3 to be able to move forward
 
+        //rotation for character
+        if (move.x != 0 || move.y != 0)
+        {
+            transform.Rotate(0, move.x * 100f * Time.deltaTime, 0);
+        }
 
         //combine delta with already existing movement since vector3 is being used now
         characterController.Move(moveDirection * speed * Time.deltaTime);

@@ -13,15 +13,15 @@ public class MenuManager : MonoBehaviour
 
     public void goToGame()
     {
-    
-        SceneManager.LoadScene("GameScene");
+
+        FindAnyObjectByType<LoadingManager>().LoadScene("GameScene");
 
     }
 
     public void goToSettings()
     {
 
-        SceneManager.LoadScene("SettingScene");
+        FindAnyObjectByType<LoadingManager>().LoadScene("SettingScene");
 
     }
 
