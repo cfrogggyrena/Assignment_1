@@ -13,7 +13,9 @@ public class CameraController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        foreach(var camera in cameras)
+        UnityEngine.Debug.Log("Camera Count: " + cameras.Count);
+
+        foreach (var camera in cameras)
         {
             camera.gameObject.SetActive(false);
         }
