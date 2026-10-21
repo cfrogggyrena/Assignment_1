@@ -2737,7 +2737,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   timerText: {fileID: 714589396}
   levelCompleteText: {fileID: 2139712839}
-  timeRemaining: 60
+  timeRemaining: 90
 --- !u!1 &118049207
 GameObject:
   m_ObjectHideFlags: 0
@@ -6139,9 +6139,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '60
-
-'
+  m_text: 90
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 755603ff5030644109410fed8a7035f4, type: 2}
   m_sharedMaterial: {fileID: 3412166235148412349, guid: 755603ff5030644109410fed8a7035f4, type: 2}
