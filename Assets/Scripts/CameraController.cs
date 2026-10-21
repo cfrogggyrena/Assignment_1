@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Unity.Cinemachine;
@@ -10,36 +11,95 @@ public class CameraController : MonoBehaviour
 
     public int currentCameraIndex = 0;
 
+    //define player controller to use
+    public MainPlayerController playerController;
+    //define game manager to use
+
+
+
+    //camera intro duration
+    [SerializeField] private float worldPanDuration = 15f;
+    [SerializeField] private float playerZoomDuration = 8f;
+    [SerializeField] private float targetZoomDuration = 10f;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        UnityEngine.Debug.Log("Camera Count: " + cameras.Count);
+        // UNCOMMENT IF EVER USE MULTIPLE CAMERAS BY CLICKING ONE KEY AGAIN
 
-        foreach (var camera in cameras)
+        //UnityEngine.Debug.Log("Camera Count: " + cameras.Count);
+
+        //foreach (var camera in cameras)
+        //{
+        //    camera.gameObject.SetActive(false);
+        //}
+        //if (cameras.Count > 0)
+        //{
+        //    cameras[currentCameraIndex % cameras.Count].gameObject.SetActive(true);
+        //}
+
+
+        //calls coroutine for camera animations
+        StartCoroutine(playCamerasStart());
+
+
+    }
+
+    //coroutine to switch between camera animations
+    private IEnumerator playCamerasStart()
+    {
+        //disables player controller so user doesnt move while the animation goes
+        playerController.enabled = false;
+
+        //Disable all cameras
+        foreach(var camera in cameras)
         {
             camera.gameObject.SetActive(false);
         }
-        if (cameras.Count > 0)
-        {
-            cameras[currentCameraIndex % cameras.Count].gameObject.SetActive(true);
-        }
+
+        //World Pan active 
+        cameras[0].gameObject.SetActive(true);
+        yield return new WaitForSeconds(worldPanDuration);
+        cameras[0].gameObject.SetActive(false); //de-activate world pan camera
+
+        //Player zoom active 
+        cameras[1].gameObject.SetActive(true);
+        yield return new WaitForSeconds(playerZoomDuration);
+        cameras[1].gameObject.SetActive(false); //de-activate player zoom camera
+
+        //Target zoom active
+        cameras[2].gameObject.SetActive(true);
+        yield return new WaitForSeconds(targetZoomDuration);
+        cameras[2].gameObject.SetActive(false); //de-activate target zoon camera
+
+
+        //Gameplay camera active (will be the only one staying active after)
+        cameras[3].gameObject.SetActive(true);
+
+        playerController.enabled = true; //controller comes back to work
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Keyboard.current.cKey.wasPressedThisFrame && cameras.Count > 0)
-        {
-            UnityEngine.Debug.Log("C Pressed!");
+        // UNCOMMENT IF EVER USE MULTIPLE CAMERAS BY CLICKING ONE KEY AGAIN
 
-            cameras[currentCameraIndex % cameras.Count].gameObject.SetActive(false);
+        //if(Keyboard.current.cKey.wasPressedThisFrame && cameras.Count > 0)
+        //{
+        //    UnityEngine.Debug.Log("C Pressed!");
 
-            currentCameraIndex++;
+        //    cameras[currentCameraIndex % cameras.Count].gameObject.SetActive(false);
 
-            UnityEngine.Debug.Log(currentCameraIndex);
+        //    currentCameraIndex++;
 
-            cameras[currentCameraIndex % cameras.Count].gameObject.SetActive(true);
-        }
-        
+        //    UnityEngine.Debug.Log(currentCameraIndex);
+
+        //    cameras[currentCameraIndex % cameras.Count].gameObject.SetActive(true);
+        //}
+
+
+
+
     }
 }

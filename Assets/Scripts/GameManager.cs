@@ -6,77 +6,105 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
-    //define text for the UI to attach
-    public TMP_Text timerText; 
+    // UI vars
+    public TMP_Text timerText;
     public GameObject levelCompleteText;
 
-    public float timeRemaining = 60f; //game time (60s)
+    // timer var
+    public float timeRemaining = 60f;
 
-    private bool gameFinished = false; //set initial state of game to not finished
+    //game states
+    private bool gameFinished = false;
+    private bool timerRunning = false;
 
     void Start()
     {
-        levelCompleteText.SetActive(false); //message remain invisible
+        levelCompleteText.SetActive(false);
+
+        // display before gameplay starts
+        timerText.text = "READY";
     }
 
     void Update()
     {
-        //Keeps updating through the game. While calling gameFinished, check on the timer and keep
-        //on substracting from the 60s. Once it reaches zero, timer turns red
-        if (gameFinished) return; 
+        //stop processing if game is finished
+        if (gameFinished)
+            return;
 
+        // FOR MIDTERM:
+        //doesnt start counting until animation for cameras is done lol (i almost forgot about this)
+        if (!timerRunning)
+            return;
+
+        //countdown
         timeRemaining -= Time.deltaTime;
 
-        timerText.text = Mathf.CeilToInt(timeRemaining).ToString(); //converts from number to string for the ui display
+        timerText.text =
+            Mathf.CeilToInt(timeRemaining).ToString();
 
+        //turn red when timer reaches 0
         if (timeRemaining < 0)
         {
             timerText.color = Color.red;
         }
     }
 
-    //function for when the level is completed
+    //called from CameraController after intro sequence
+    public void StartTimer()
+    {
+        timerRunning = true;
+
+        //show current time immediately
+        timerText.text =
+            Mathf.CeilToInt(timeRemaining).ToString();
+    }
+
+    //funtion for when level is completed
     public void CompleteLevel()
     {
+        levelCompleteText.SetActive(true);
 
-        levelCompleteText.SetActive(true); //makes message visible
+        if (gameFinished)
+            return;
 
-        if (gameFinished) return; //check/calls on gameFinished state
+        gameFinished = true;
 
-        gameFinished = true; //game is finished
+        //calculate score
+        int score =
+            Mathf.Max(0, Mathf.CeilToInt(timeRemaining));
 
-        //defines the text to display based on the score and time. Calculates score based on
-        //how fast or slow player completed the level.
-        int score = Mathf.Max(0, Mathf.CeilToInt(timeRemaining));
-
-        //format for the ui display based on time
+        //total Score
         int total =
-            PlayerPrefs.GetInt("TotalScore", 0) + score; //display total score
+            PlayerPrefs.GetInt("TotalScore", 0) + score;
 
         PlayerPrefs.SetInt("TotalScore", total);
 
+        //best Run
         int best =
-            PlayerPrefs.GetInt("BestRun", 0); //display best run
+            PlayerPrefs.GetInt("BestRun", 0);
 
-        //if the current score is greater than previous ones, it automatically becomes the best score. Yipeee
         if (score > best)
         {
-            PlayerPrefs.SetInt("BestRun", score); 
+            PlayerPrefs.SetInt("BestRun", score);
         }
 
-        //gets amount of times played and puts it into playerprefs
+        //games played in total
         PlayerPrefs.SetInt(
             "GamesPlayed",
-            PlayerPrefs.GetInt("GamesPlayed", 0) + 1); 
+            PlayerPrefs.GetInt("GamesPlayed", 0) + 1
+        );
 
-        PlayerPrefs.Save(); //save playerprefs
-
-        StartCoroutine(ReturnHome()); //call coroutine to go home
+        PlayerPrefs.Save(); //saves everything on player prefs
+         
+        StartCoroutine(ReturnHome());
     }
 
+    //function to go back home (After game is done)
     IEnumerator ReturnHome()
     {
-        yield return new WaitForSeconds(5); //wait for 5s (duh)
-        FindAnyObjectByType<LoadingManager>().LoadScene("HomeScene"); //loads homescene
+        yield return new WaitForSeconds(5);
+
+        FindAnyObjectByType<LoadingManager>().LoadScene("HomeScene");
     }
+    
 }

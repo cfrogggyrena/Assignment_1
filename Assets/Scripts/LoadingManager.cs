@@ -35,10 +35,9 @@ public class LoadingManager : MonoBehaviour
     {
         loadingCanvas.enabled = true;
 
-        yield return null; // let Unity render the loading UI, or else it will pop-up and leave immediately lol
+        yield return new WaitForSeconds(2f); // let Unity render the loading UI, or else it will pop-up and leave immediately lol
 
-        AsyncOperation operation =
-            SceneManager.LoadSceneAsync(sceneName);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
 
         while (!operation.isDone)
         {
