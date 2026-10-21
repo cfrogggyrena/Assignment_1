@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
         levelCompleteText.SetActive(false);
 
         // display before gameplay starts
-        timerText.text = "READY";
+        timerText.text = "Waiting...";
     }
 
     void Update()
