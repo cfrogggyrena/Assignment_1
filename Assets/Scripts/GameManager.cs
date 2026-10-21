@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject levelCompleteText;
 
     // timer var
-    public float timeRemaining = 60f;
+    public float timeRemaining = 90f;
 
     //game states
     private bool gameFinished = false;
