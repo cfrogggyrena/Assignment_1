@@ -78,6 +78,13 @@ public class CameraController : MonoBehaviour
         cameras[3].gameObject.SetActive(true);
 
         playerController.enabled = true; //controller comes back to work
+
+        GameManager gameManager = FindAnyObjectByType<GameManager>();
+
+        if (gameManager != null)
+        {
+            gameManager.StartTimer();
+        }
     }
 
     // Update is called once per frame
